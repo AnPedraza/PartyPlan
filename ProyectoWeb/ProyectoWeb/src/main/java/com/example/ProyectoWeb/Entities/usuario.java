@@ -26,9 +26,12 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String nombreCompleto;
 
     private String correo;
 
     private String telefono;
+
+
 }

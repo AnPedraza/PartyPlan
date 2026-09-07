@@ -46,4 +46,6 @@ public class Reserva {
     private Integer numeroPersonas;
 
     private String estado;
+
+
 }
