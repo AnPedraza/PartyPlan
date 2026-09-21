@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto Web</title>
+</head>
+
+<body>
+
+    <h1>PartyPlan</h1>
+
+    <p>Tu gestor de eventos favorito xd</p>
+
+    <hr>
+
+    <h2>Gestión</h2>
+
+    <ul>
+
+        <li>
+            <a th:href="@{/usuarios}">
+                Usuarios
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/reservas}">
+                Reservas
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/planes}">
+                Planes
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/pagos}">
+                Pagos
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/lugares}">
+                Lugares
+            </a>
+        </li>
+
+    </ul>
+
+</body>
+
+</html>

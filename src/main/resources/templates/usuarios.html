@@ -1,76 +1,73 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
-<meta charset="UTF-8">
-
-<title>Usuarios</title>
-
+    <meta charset="UTF-8">
+    <title>Usuarios</title>
 </head>
 
 <body>
 
-<h1>Usuarios</h1>
+    <h1>Usuarios</h1>
 
-<a th:href="@{/usuarios/nuevo}">
-    Nuevo usuario
-</a>
+    <a th:href="@{/usuarios/nuevo}">Nuevo usuario</a>
 
-<br><br>
+    <br><br>
 
-<table border="1">
+    <table border="1">
 
-    <thead>
+        <thead>
 
-        <tr>
+            <tr>
+                <th>ID</th>
+                <th>Nombre completo</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
 
-            <th>ID</th>
+        </thead>
 
-            <th>Nombre completo</th>
+        <tbody>
 
-            <th>Correo</th>
+            <tr th:each="u : ${usuarios}">
 
-            <th>Teléfono</th>
+                <td th:text="${u.id}"></td>
 
-            <th>Acciones</th>
+                <td th:text="${u.nombreCompleto}"></td>
 
-        </tr>
+                <td th:text="${u.correo}"></td>
 
-    </thead>
+                <td th:text="${u.telefono}"></td>
 
-    <tbody>
+                <td th:text="${u.activo ? 'Activo' : 'Inactivo'}"></td>
 
-        <tr th:each="u : ${usuarios}">
+                <td>
 
-            <td th:text="${u.id}"></td>
+                    <a th:href="@{/usuarios/editar/{id}(id=${u.id})}">
+                        Editar
+                    </a>
 
-            <td th:text="${u.nombreCompleto}"></td>
+                    |
 
-            <td th:text="${u.correo}"></td>
+                    <a th:if="${u.activo}"
+                       th:href="@{/usuarios/eliminar/{id}(id=${u.id})}">
+                        Desactivar
+                    </a>
 
-            <td th:text="${u.telefono}"></td>
+                    <a th:unless="${u.activo}"
+                       th:href="@{/usuarios/activar/{id}(id=${u.id})}">
+                        Activar
+                    </a>
 
-            <td>
+                </td>
 
-                <a th:href="@{/usuarios/editar/{id}(id=${u.id})}">
-                    Editar
-                </a>
+            </tr>
 
-                |
+        </tbody>
 
-                <a th:href="@{/usuarios/eliminar/{id}(id=${u.id})}">
-                    Eliminar
-                </a>
-
-            </td>
-
-        </tr>
-
-    </tbody>
-
-</table>
+    </table>
 
 </body>
 
