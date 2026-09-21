@@ -1,47 +1,52 @@
 package com.example.ProyectoWeb.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.example.ProyectoWeb.Entities.plan;
 import com.example.ProyectoWeb.Services.planService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/planes")
-@RequiredArgsConstructor
+@Controller
+@RequestMapping("/planes")
 public class planController {
 
-    private final planService planService;
+    @Autowired
+    private planService service;
 
     @GetMapping
-    public List<plan> obtenerTodos() {
-        return planService.obtenerTodos();
+    public String listar(Model model) {
+        model.addAttribute("planes", service.obtenerTodos());
+        return "planes";
     }
 
-    @GetMapping("/{id}")
-    public plan obtenerPorId(@PathVariable Long id) {
-        return planService.obtenerPorId(id);
+    @GetMapping("/nuevo")
+    public String nuevo(Model model) {
+        model.addAttribute("plan", new plan());
+        return "plan-form";
     }
 
-    @GetMapping("/tipo/{tipo}")
-    public List<plan> obtenerPorTipo(@PathVariable String tipo) {
-        return planService.obtenerPorTipo(tipo);
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute plan plan) {
+        service.guardar(plan);
+        return "redirect:/planes";
     }
 
-    @GetMapping("/precio-maximo/{precioMaximo}")
-    public List<plan> obtenerPorPrecioMaximo(@PathVariable BigDecimal precioMaximo) {
-        return planService.obtenerPorPrecioMaximo(precioMaximo);
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        model.addAttribute("plan", service.obtenerPorId(id));
+        return "plan-form";
     }
 
-    @PostMapping
-    public plan guardar(@RequestBody plan plan) {
-        return planService.guardar(plan);
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable Long id) {
+        service.eliminar(id);
+        return "redirect:/planes";
     }
 
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        planService.eliminar(id);
-    }
 }

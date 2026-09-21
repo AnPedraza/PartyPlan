@@ -8,10 +8,10 @@ import java.util.List;
 
 @Repository
 public interface reservaRepository extends JpaRepository<reserva, Long> {
-    
+
     List<reserva> findByUsuario_Id(Long idUsuario);
 
     List<reserva> findByPlan_IdAndFecha(Long idPlan, LocalDate fecha);
-    
+
     List<reserva> findByEstado(String estado);
 }

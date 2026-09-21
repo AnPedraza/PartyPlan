@@ -8,8 +8,8 @@ import java.util.List;
 
 @Repository
 public interface planRepository extends JpaRepository<plan, Long> {
-    
+
     List<plan> findByTipoIgnoreCase(String tipo);
-    
+
     List<plan> findByPrecioLessThanEqual(BigDecimal precioMaximo);
 }

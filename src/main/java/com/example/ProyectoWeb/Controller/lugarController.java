@@ -1,41 +1,51 @@
 package com.example.ProyectoWeb.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.example.ProyectoWeb.Entities.lugar;
 import com.example.ProyectoWeb.Services.lugarService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/lugares")
-@RequiredArgsConstructor
+@Controller
+@RequestMapping("/lugares")
 public class lugarController {
 
-    private final lugarService lugarService;
+    @Autowired
+    private lugarService service;
 
     @GetMapping
-    public List<lugar> obtenerTodos() {
-        return lugarService.obtenerTodos();
+    public String listar(Model model) {
+        model.addAttribute("lugares", service.obtenerTodos());
+        return "lugares";
     }
 
-    @GetMapping("/{id}")
-    public lugar obtenerPorId(@PathVariable Long id) {
-        return lugarService.obtenerPorId(id);
+    @GetMapping("/nuevo")
+    public String nuevo(Model model) {
+        model.addAttribute("lugar", new lugar());
+        return "lugar-form";
     }
 
-    @GetMapping("/categoria/{categoria}")
-    public List<lugar> obtenerPorCategoria(@PathVariable String categoria) {
-        return lugarService.obtenerPorCategoria(categoria);
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute lugar lugar) {
+        service.guardar(lugar);
+        return "redirect:/lugares";
     }
 
-    @PostMapping
-    public lugar guardar(@RequestBody lugar lugar) {
-        return lugarService.guardar(lugar);
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        model.addAttribute("lugar", service.obtenerPorId(id));
+        return "lugar-form";
     }
 
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        lugarService.eliminar(id);
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable Long id) {
+        service.eliminar(id);
+        return "redirect:/lugares";
     }
 }

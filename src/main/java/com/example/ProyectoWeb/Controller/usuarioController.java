@@ -1,41 +1,60 @@
 package com.example.ProyectoWeb.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.example.ProyectoWeb.Entities.usuario;
 import com.example.ProyectoWeb.Services.usuarioService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+@Controller
 
-@RestController
-@RequestMapping("/api/usuarios")
-@RequiredArgsConstructor
+@RequestMapping("/usuarios")
 public class usuarioController {
 
-    private final usuarioService usuarioService;
+    @Autowired
+    private usuarioService service;
 
     @GetMapping
-    public List<usuario> obtenerTodos() {
-        return usuarioService.obtenerTodos();
+    public String listar(Model model) {
+        model.addAttribute("usuarios", service.obtenerTodos());
+        return "usuarios";
     }
 
-    @GetMapping("/{id}")
-    public usuario obtenerPorId(@PathVariable Long id) {
-        return usuarioService.obtenerPorId(id);
+    @GetMapping("/nuevo")
+    public String nuevo(Model model) {
+        model.addAttribute("usuario", new usuario());
+        return "usuario-form";
     }
 
-    @GetMapping("/correo/{correo}")
-    public usuario obtenerPorCorreo(@PathVariable String correo) {
-        return usuarioService.obtenerPorCorreo(correo);
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute usuario usuario) {
+        service.guardar(usuario);
+        return "redirect:/usuarios";
     }
 
-    @PostMapping
-    public usuario guardar(@RequestBody usuario usuario) {
-        return usuarioService.guardar(usuario);
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        model.addAttribute("usuario", service.obtenerPorId(id));
+        return "usuario-form";
     }
 
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        usuarioService.eliminar(id);
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable Long id) {
+        service.eliminar(id);
+        return "redirect:/usuarios";
+    }
+
+    @GetMapping("/activar/{id}")
+    public String activar(@PathVariable Long id) {
+
+        service.activar(id);
+
+        return "redirect:/usuarios";
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface lugarRepository extends JpaRepository<lugar, Long> {
-    
+
     List<lugar> findByCategoriaIgnoreCase(String categoria);
 
 }

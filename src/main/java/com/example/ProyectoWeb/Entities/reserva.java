@@ -33,7 +33,7 @@ public class reserva {
 
     @ManyToOne
     private usuario usuario;
-    
+
     @ManyToOne
     private plan plan;
 
@@ -46,6 +46,5 @@ public class reserva {
     private Integer numeroPersonas;
 
     private String estado;
-
 
 }

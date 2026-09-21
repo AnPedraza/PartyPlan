@@ -1,60 +1,75 @@
 package com.example.ProyectoWeb.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.example.ProyectoWeb.Entities.reserva;
+import com.example.ProyectoWeb.Services.planService;
 import com.example.ProyectoWeb.Services.reservaService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.*;
+import com.example.ProyectoWeb.Services.usuarioService;
 
-import java.time.LocalDate;
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/reservas")
-@RequiredArgsConstructor
+@Controller
+@RequestMapping("/reservas")
 public class reservaController {
 
-    private final reservaService reservaService;
+    @Autowired
+    private reservaService service;
+
+    @Autowired
+    private usuarioService usuarioService;
+
+    @Autowired
+    private planService planService;
 
     @GetMapping
-    public List<reserva> obtenerTodas() {
-        return reservaService.obtenerTodas();
+    public String listar(Model model) {
+
+        model.addAttribute("reservas", service.obtenerTodas());
+
+        return "reservas";
     }
 
-    @GetMapping("/{id}")
-    public reserva obtenerPorId(@PathVariable Long id) {
-        return reservaService.obtenerPorId(id);
+    @GetMapping("/nuevo")
+    public String nuevo(Model model) {
+
+        model.addAttribute("reserva", new reserva());
+        model.addAttribute("usuarios", usuarioService.obtenerTodos());
+        model.addAttribute("planes", planService.obtenerTodos());
+
+        return "reserva-form";
     }
 
-    @GetMapping("/usuario/{idUsuario}")
-    public List<reserva> obtenerPorUsuario(@PathVariable Long idUsuario) {
-        return reservaService.obtenerPorUsuario(idUsuario);
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute reserva reserva) {
+
+        service.crear(reserva);
+
+        return "redirect:/reservas";
     }
 
-    @GetMapping("/plan/{idPlan}/fecha/{fecha}")
-    public List<reserva> obtenerPorPlanYFecha(
-            @PathVariable Long idPlan,
-            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
-        return reservaService.obtenerPorPlanYFecha(idPlan, fecha);
+    @GetMapping("/editar/{id}")
+    public String editar(
+            @PathVariable Long id,
+            Model model) {
+
+        model.addAttribute("reserva", service.obtenerPorId(id));
+        model.addAttribute("usuarios", usuarioService.obtenerTodos());
+        model.addAttribute("planes", planService.obtenerTodos());
+
+        return "reserva-form";
     }
 
-    @GetMapping("/estado/{estado}")
-    public List<reserva> obtenerPorEstado(@PathVariable String estado) {
-        return reservaService.obtenerPorEstado(estado);
-    }
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable Long id) {
 
-    @PostMapping
-    public reserva crear(@RequestBody reserva reserva) {
-        return reservaService.crear(reserva);
-    }
+        service.eliminar(id);
 
-    @PutMapping("/{id}/estado")
-    public reserva cambiarEstado(@PathVariable Long id, @RequestBody String nuevoEstado) {
-        return reservaService.cambiarEstado(id, nuevoEstado);
-    }
-
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        reservaService.eliminar(id);
+        return "redirect:/reservas";
     }
 }

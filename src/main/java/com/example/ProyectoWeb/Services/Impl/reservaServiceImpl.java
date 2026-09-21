@@ -31,7 +31,7 @@ public class reservaServiceImpl implements reservaService {
     }
 
     @Override
-    public List<reserva > obtenerPorPlanYFecha(Long idPlan, LocalDate fecha) {
+    public List<reserva> obtenerPorPlanYFecha(Long idPlan, LocalDate fecha) {
         return reservaRepository.findByPlan_IdAndFecha(idPlan, fecha);
     }
 

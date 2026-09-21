@@ -1,11 +1,14 @@
 package com.example.ProyectoWeb.Services.Impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.ProyectoWeb.Entities.usuario;
 import com.example.ProyectoWeb.Repository.usuarioRepository;
 import com.example.ProyectoWeb.Services.usuarioService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,21 @@ public class usuarioServiceImpl implements usuarioService {
 
     @Override
     public void eliminar(Long id) {
-        usuarioRepository.deleteById(id);
+
+        usuario usuario = obtenerPorId(id);
+
+        usuario.setActivo(false);
+
+        usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public void activar(Long id) {
+
+        usuario usuario = obtenerPorId(id);
+
+        usuario.setActivo(true);
+
+        usuarioRepository.save(usuario);
     }
 }

@@ -1,11 +1,14 @@
 package com.example.ProyectoWeb.Services.Impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.ProyectoWeb.Entities.lugar;
 import com.example.ProyectoWeb.Repository.lugarRepository;
 import com.example.ProyectoWeb.Services.lugarService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
